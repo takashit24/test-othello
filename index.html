@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Othello / Reversi</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1 class="title">Othello</h1>
+        <div class="scoreboard" aria-live="polite">
+          <div class="score score--black" title="黒の枚数">
+            <span class="disc disc--black" aria-hidden="true"></span>
+            <span id="score-black">2</span>
+          </div>
+          <div class="turn" id="turn-indicator" title="手番">● 黒の番</div>
+          <div class="score score--white" title="白の枚数">
+            <span class="disc disc--white" aria-hidden="true"></span>
+            <span id="score-white">2</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="controls">
+          <div class="control-group">
+            <label class="label">対戦相手:</label>
+            <label class="radio"><input type="radio" name="mode" value="pvp" checked> 2人対戦</label>
+            <label class="radio"><input type="radio" name="mode" value="cpu"> CPU（かんたん）</label>
+          </div>
+          <div class="control-group">
+            <label class="checkbox"><input type="checkbox" id="toggle-hints" checked> ヒントを表示</label>
+          </div>
+          <div class="control-group">
+            <button id="undo-btn" class="btn" title="1手戻す">取り消し</button>
+            <button id="reset-btn" class="btn btn--primary" title="最初から">新しいゲーム</button>
+          </div>
+        </section>
+
+        <section class="board-wrap">
+          <div id="board" class="board" role="grid" aria-label="オセロ盤 8x8"></div>
+        </section>
+
+        <p id="message" class="message" aria-live="polite"></p>
+      </main>
+
+      <footer class="footer">
+        <small>操作: マスをクリック。ヒントは薄い点で表示。</small>
+      </footer>
+    </div>
+
+    <script src="script.js" defer></script>
+  </body>
+  </html>
+
