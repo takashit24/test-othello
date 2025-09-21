@@ -221,34 +221,38 @@
     const moves = getValidMoves(board, current);
     if(moves.size === 0) return; // nothing to do
     busy = true;
+    render();
     setTimeout(() => {
       // Greedy + positional weighting
       const best = pickAIMove(board, current, moves);
-      if(best){
-        const [r,c] = best;
-        pushHistory();
-        const flips = moves.get(`${r},${c}`);
-        board = applyMove(board, r, c, current, flips);
-        lastMove = {r,c};
-        current = -current;
-        msgEl.textContent = '';
-        render(true);
-        // Handle pass or end for human
-        const humanMoves = getValidMoves(board, current);
-        if(humanMoves.size === 0){
-          const oppMoves = getValidMoves(board, -current);
-          if(oppMoves.size === 0){
-            endGame();
-          } else {
+      if(!best){
+        busy = false;
+        return;
+      }
+      const [r,c] = best;
+      pushHistory();
+      const flips = moves.get(`${r},${c}`);
+      board = applyMove(board, r, c, current, flips);
+      lastMove = {r,c};
+      current = -current;
+      msgEl.textContent = '';
+      busy = false;
+      render(true);
+      // Handle pass or end for human
+      const humanMoves = getValidMoves(board, current);
+      if(humanMoves.size === 0){
+        const oppMoves = getValidMoves(board, -current);
+        if(oppMoves.size === 0){
+          endGame();
+        } else {
             msgEl.textContent = current === BLACK ? '黒は打てないためパス' : '白は打てないためパス';
-            current = -current;
-            render();
-            // might chain into CPU again if still its turn
-            maybeCPUMove();
-          }
+          current = -current;
+          busy = true;
+          render();
+          // might chain into CPU again if still its turn
+          maybeCPUMove();
         }
       }
-      busy = false;
     }, 350);
   }
 
@@ -330,7 +334,7 @@
     const {black, white} = scoreOf(board);
     scoreBlackEl.textContent = String(black);
     scoreWhiteEl.textContent = String(white);
-    turnEl.textContent = (current === BLACK ? '● 黒の番' : '○ 白の番');
+    turnEl.textContent = current === BLACK ? '● 黒の番' : '○ 白の番';
   }
 
   // Expose for console debugging (optional)
